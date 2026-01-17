@@ -1,4 +1,58 @@
-<!DOCTYPE html>
+async function loadVenueData() {
+            try {
+                const csvData = await window.fs.readFile('mapkalothsavamtest.csv', { encoding: 'utf8' });
+                
+                const lines = csvData.trim().split('\n');
+                const venues = [];
+                
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line) continue;
+                    
+                    const values = line.split('\t');
+                    if (values.length >= 5) {
+                        const venueNumber = values[0]?.trim() || '';
+                        const venueName = values[1]?.trim() || '';
+                        const place = values[2]?.trim() || '';
+                        const lat = parseFloat(values[3]?.trim());
+                        const lng = parseFloat(values[4]?.trim());
+                        
+                        if (!isNaN(lat) && !isNaN(lng)) {
+                            venues.push({
+                                venueNumber,
+                                venueName,
+                                place,
+                                location: [lat, lng]
+                            });
+                        }
+                    }
+                }
+                
+                return venues;
+            } catch (error) {
+                console.error('Error loading CSV:', error);
+                // Fallback to hardcoded data if CSV fails
+                return [
+                    { venueNumber: "1", venueName: "സൂര്യകാന്തി", place: "തേക്കിൻ‌കാട് മൈതാനം (എക്സിബിഷൻ ഗ്രൗണ്ട്)", location: [10.525246, 76.2163376] },
+                    { venueNumber: "2", venueName: "പാരിജാതം", place: "തേക്കിൻ‌കാട് മൈതാനം (CMS ന് മുൻവശം)", location: [10.525595, 76.2123779] },
+                    { venueNumber: "3", venueName: "നീലക്കുറിഞ്ഞി", place: "തേക്കിൻ‌കാട് മൈതാനം (ബാനർജി ക്ലബ്ബിന് മുൻവശം)", location: [10.5270048, 76.2138102] },
+                    { venueNumber: "4", venueName: "പവിഴമല്ലി", place: "ടൗൺഹാൾ തൃശ്ശൂർ", location: [10.5302025, 76.2188117] },
+                    { venueNumber: "5", venueName: "ശംഖുപുഷ്പം", place: "വിവേകോദയം ബോയ്സ് എച്ച്.എസ്.എസ്.", location: [10.5285451, 76.210792] },
+                    { venueNumber: "6", venueName: "ചെമ്പകം", place: "കേരളാബാങ്ക് ഹാൾ", location: [10.54135, 76.216063] },
+                    { venueNumber: "7", venueName: "മന്ദാരം", place: "കേരള സാഹിത്യ അക്കാദമി ഓപ്പൺ സ്റ്റേജ്", location: [10.5291112, 76.2186489] },
+                    { venueNumber: "8", venueName: "കനകാബരം", place: "കേരള സാഹിത്യ അക്കാദമി ഹാൾ", location: [10.5294896, 76.2183378] },
+                    { venueNumber: "9", venueName: "ഗുൽമോഹർ", place: "സെന്റ് ജോസഫ്സ് സിജിഎച്ച്എസ്എസ്", location: [10.5131192, 76.2201614] },
+                    { venueNumber: "10", venueName: "ചെമ്പരത്തി", place: "എം ടി എച്ച് എസ് ചേലക്കോട്ടുകര", location: [10.50735, 76.224882] },
+                    { venueNumber: "11", venueName: "കർണികാരം", place: "കാൽഡിയൻ സിറിയൻ എച്ച് എസ് എസ് തൃശ്ശൂർ", location: [10.518478, 76.218029] },
+                    { venueNumber: "12", venueName: "നിത്യകല്യാണി", place: "എസ് എച്ച് സി ജി എച്ച് എസ് എസ് തൃശൂർ", location: [10.526163, 76.219376] },
+                    { venueNumber: "13", venueName: "പനിനീർപ്പൂവ്", place: "ജവഹർ ബാലഭവൻ", location: [10.5322856, 76.2191585] },
+                    { venueNumber: "14", venueName: "നന്ത്യാർവട്ടം", place: "ഹോളിഫാമിലി സി.ജി.എച്ച്.എസ്. ചെമ്പുക്കാവ്", location: [10.5319396, 76.2224547] },
+                    { venueNumber: "15", venueName: "ഡാലിയ", place: "ഹോളിഫാമിലി സി.ജി.എച്ച്.എസ്. ചെമ്പുക്കാവ്", location: [10.53214, 76.222629] },
+                    { venueNumber: "16", venueName: "വാടാമല്ലി", place: "സി എം എസ് എച്ച് എസ് എസ് തൃശ്ശൂർ", location: [10.5252861, 76.2113821] },
+                    { venueNumber: "17", venueName: "മുല്ലപ്പൂവ്", place: "സി എം എസ് എച്ച് എസ് എസ് തൃശ്ശൂർ", location: [10.5251437, 76.2115591] },
+                    { venueNumber: "18", venueName: "ആമ്പൽപ്പൂവ്", place: "ഗവ മോഡൽ ബോയ്സ് എച്ച് എസ് എസ് തൃശ്ശൂർ", location: [10.5274965, 76.2192472] },
+                    { venueNumber: "19", venueName: "തുമ്പപ്പൂവ്", place: "ഗവ മോഡൽ ബോയ്സ് എച്ച് എസ് എസ് തൃശ്ശൂർ", location: [10.5274028, 76.2186947] },
+                    { venueNumber: "20", venueName: "കണ്ണാന്തളി", place: "സെന്റ് ക്ലയേഴ്സ് എച്ച് എസ് എസ് തൃശ്ശൂ<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -148,12 +202,44 @@
         }
 
         .custom-marker {
-            width: 14px;
-            height: 14px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .marker-pin {
+            width: 0;
+            height: 0;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 30px solid #667eea;
+            position: relative;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+
+        .marker-pin::after {
+            content: '';
+            position: absolute;
+            top: -30px;
+            left: -6px;
+            width: 12px;
+            height: 12px;
             background: #667eea;
             border-radius: 50%;
-            border: 3px solid white;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+            border: 2px solid white;
+        }
+
+        .marker-label {
+            background: white;
+            color: #667eea;
+            padding: 4px 8px;
+            font-weight: bold;
+            font-size: 10px;
+            white-space: nowrap;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            margin-top: 2px;
+            border: 1px solid #667eea;
         }
 
         .leaflet-popup-content-wrapper {
@@ -399,9 +485,12 @@
                 const marker = L.marker(venue.location, {
                     icon: L.divIcon({
                         className: 'custom-marker-container',
-                        html: `<div class="custom-marker"></div>`,
-                        iconSize: [14, 14],
-                        iconAnchor: [7, 7]
+                        html: `<div class="custom-marker">
+                                <div class="marker-pin"></div>
+                                <div class="marker-label">${venue.venueName}</div>
+                               </div>`,
+                        iconSize: [200, 50],
+                        iconAnchor: [100, 50]
                     })
                 }).addTo(map);
 
